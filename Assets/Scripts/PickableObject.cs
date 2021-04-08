@@ -1,0 +1,43 @@
+﻿using System;
+using UnityEngine;
+
+public class PickableObject : MonoBehaviour
+{
+  private Rigidbody _rigidbody;
+  private Outline _outlineScript;
+  private bool _picked;
+  
+  private void Awake()
+  {
+    _rigidbody = GetComponent<Rigidbody>();
+    _outlineScript = GetComponent<Outline>();
+  }
+
+  private void Start() =>
+    OutlineOff();
+
+  public void PickUp(Transform holdObject)
+  {
+    transform.SetParent(holdObject);
+    transform.position = holdObject.position;
+    _rigidbody.isKinematic = true;
+    _rigidbody.useGravity = false;
+    _picked = true;
+  }
+  
+  public void Throw()
+  {
+    _rigidbody.isKinematic = false;
+    _rigidbody.useGravity = true;
+    _picked = false;
+  }
+
+  public void OutlineOn()
+  {
+    if (!_picked)
+      _outlineScript.enabled = true;
+  }
+
+  public void OutlineOff() => 
+    _outlineScript.enabled = false;
+}
