@@ -19,6 +19,7 @@ public class PickableObject : MonoBehaviour
   {
     transform.SetParent(holdObject);
     transform.position = holdObject.position;
+    transform.forward = holdObject.forward;
     
     _rigidbody.isKinematic = true;
     _rigidbody.useGravity = false;

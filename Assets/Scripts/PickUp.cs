@@ -5,7 +5,7 @@ public class PickUp : MonoBehaviour
   [SerializeField] private new Camera camera;
   [SerializeField] private Transform objectHolder;
   [SerializeField] private PickableObject item;
-  [SerializeField] private float pickUpDistance = 2f;
+  [SerializeField] private float pickUpDistance;
 
   private bool _carryObject;
   private PickableObject _highlightedObject;// = new List<PickableObject>();
@@ -13,7 +13,7 @@ public class PickUp : MonoBehaviour
 
   private void Update()
   {
-    var directionRay = new Ray(transform.position, camera.transform.forward);
+    var directionRay = new Ray(camera.transform.position, camera.transform.forward);
     
     if (Physics.Raycast(directionRay, out var hit, pickUpDistance))
     {
@@ -35,10 +35,7 @@ public class PickUp : MonoBehaviour
     if (CanPickUp())
       PickUpObject();
     else if (CanConnect())
-    {
-      print("*");
       item.Connect(_highlightedObject);
-    }
     
     if (Input.GetMouseButton(0))
       Throw();
@@ -47,7 +44,7 @@ public class PickUp : MonoBehaviour
       Input.GetKeyDown(KeyCode.E) && _detectObject && !_carryObject;
     
     bool CanConnect() => 
-      Input.GetKeyDown(KeyCode.E) && _detectObject && _carryObject;
+      Input.GetKeyDown(KeyCode.E) && _detectObject && _carryObject && item != _highlightedObject;
   }
 
   private void PickUpObject()
