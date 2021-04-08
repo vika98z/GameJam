@@ -8,14 +8,18 @@ public class PickUp : MonoBehaviour
   [SerializeField] private float pickUpDistance;
 
   private bool _carryObject;
-  private PickableObject _highlightedObject;// = new List<PickableObject>();
+  private PickableObject _highlightedObject;
   private bool _detectObject;
+  private LayerMask _layerMask ;
+
+  private void Awake() => 
+    _layerMask =~ LayerMask.GetMask("Player");
 
   private void Update()
   {
-    var directionRay = new Ray(camera.transform.position, camera.transform.forward);
-    
-    if (Physics.Raycast(directionRay, out var hit, pickUpDistance))
+    var directionRay = camera.ScreenPointToRay(Input.mousePosition);
+
+    if (Physics.Raycast(directionRay, out var hit, pickUpDistance, _layerMask))
     {
       if (hit.collider.CompareTag("PickUp"))
       {
