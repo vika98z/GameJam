@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
@@ -9,11 +10,12 @@ public class PickUp : MonoBehaviour
 
   private bool _carryObject;
   private PickableObject _highlightedObject;
+  private List<PickableObject> _highlightedObjectsList = new List<PickableObject>();
   private bool _detectObject;
-  private LayerMask _layerMask ;
+  private LayerMask _layerMask;
 
-  private void Awake() => 
-    _layerMask =~ LayerMask.GetMask("Player");
+  private void Awake() =>
+    _layerMask = ~ LayerMask.GetMask("Player");
 
   private void Update()
   {
@@ -35,19 +37,19 @@ public class PickUp : MonoBehaviour
     }
     else
       ClearHighlighted();
-    
+
     if (CanPickUp())
       PickUpObject();
     else if (CanConnect())
       item.Connect(_highlightedObject);
-    
+
     if (Input.GetMouseButton(0))
       Throw();
 
-    bool CanPickUp() => 
+    bool CanPickUp() =>
       Input.GetKeyDown(KeyCode.E) && _detectObject && !_carryObject;
-    
-    bool CanConnect() => 
+
+    bool CanConnect() =>
       Input.GetKeyDown(KeyCode.E) && _detectObject && _carryObject && item != _highlightedObject;
   }
 
@@ -67,13 +69,13 @@ public class PickUp : MonoBehaviour
       _carryObject = false;
     }
   }
-  
+
   private void SetHighlighted()
   {
     _detectObject = true;
     _highlightedObject.OutlineOn();
   }
-  
+
   private void ClearHighlighted()
   {
     _detectObject = false;
