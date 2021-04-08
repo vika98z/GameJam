@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
@@ -8,10 +10,10 @@ public class PickUp : MonoBehaviour
   [SerializeField] private float pickUpDistance = 2f;
 
   private bool _carryObject;
-  private PickableObject _lastHighlightedObject;
+  private List<PickableObject> _highlightedObjects = new List<PickableObject>();
   private bool _detectObject;
-  
-  void Update()
+
+  private void Update()
   {
     var directionRay = new Ray(transform.position, camera.transform.forward);
     
@@ -19,43 +21,50 @@ public class PickUp : MonoBehaviour
     {
       if (hit.collider.CompareTag("PickUp"))
       {
-        _lastHighlightedObject = hit.collider.gameObject.GetComponent<PickableObject>();
+        _highlightedObjects.Add(hit.collider.gameObject.GetComponent<PickableObject>());
         SetHighlighted();
       }
       else
         ClearHighlighted();
     }
-
-    if (Input.GetKeyDown(KeyCode.E) && _detectObject)
+    else
+      ClearHighlighted();
+    
+    if (CanPickUp())
     {
-      item = _lastHighlightedObject;
+      item = _highlightedObjects.First();
       item.PickUp(objectHolder);
+      _carryObject = true;
     }
     
-    if (Input.GetMouseButton(1))
+    if (Input.GetMouseButton(0))
     {
       if (item != null)
       {
         objectHolder.DetachChildren();
         item.Throw();
+        _carryObject = false;
       }
     }
+
+    bool CanPickUp() => 
+      Input.GetKeyDown(KeyCode.E) && _detectObject && !_carryObject;
   }
 
   private void SetHighlighted()
   {
     _detectObject = true;
-    _lastHighlightedObject.OutlineOn();
+    _highlightedObjects.ForEach(p => p.OutlineOn());
   }
   
   private void ClearHighlighted()
   {
     _detectObject = false;
 
-    if (_lastHighlightedObject != null)
+    if (_highlightedObjects.Count > 0)
     {
-      _lastHighlightedObject.OutlineOff();
-      _lastHighlightedObject = null;
+      _highlightedObjects.ForEach(p => p.OutlineOff());
+      _highlightedObjects.Clear();
     }
   }
 }

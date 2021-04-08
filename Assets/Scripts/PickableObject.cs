@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PickableObject : MonoBehaviour
 {
@@ -20,9 +19,13 @@ public class PickableObject : MonoBehaviour
   {
     transform.SetParent(holdObject);
     transform.position = holdObject.position;
+    
     _rigidbody.isKinematic = true;
     _rigidbody.useGravity = false;
+    
     _picked = true;
+    
+    OutlineOff();
   }
   
   public void Throw()
