@@ -43,4 +43,9 @@ public class PickableObject : MonoBehaviour
 
   public void OutlineOff() => 
     _outlineScript.enabled = false;
+
+  public void Connect(PickableObject other)
+  {
+    print("connect");
+  }
 }

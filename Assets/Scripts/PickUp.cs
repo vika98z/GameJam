@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
@@ -10,7 +8,7 @@ public class PickUp : MonoBehaviour
   [SerializeField] private float pickUpDistance = 2f;
 
   private bool _carryObject;
-  private List<PickableObject> _highlightedObjects = new List<PickableObject>();
+  private PickableObject _highlightedObject;// = new List<PickableObject>();
   private bool _detectObject;
 
   private void Update()
@@ -21,8 +19,12 @@ public class PickUp : MonoBehaviour
     {
       if (hit.collider.CompareTag("PickUp"))
       {
-        _highlightedObjects.Add(hit.collider.gameObject.GetComponent<PickableObject>());
-        SetHighlighted();
+        var raycastedObject = hit.collider.gameObject.GetComponent<PickableObject>();
+        if (raycastedObject != _highlightedObject)
+        {
+          _highlightedObject = raycastedObject;
+          SetHighlighted();
+        }
       }
       else
         ClearHighlighted();
@@ -31,40 +33,54 @@ public class PickUp : MonoBehaviour
       ClearHighlighted();
     
     if (CanPickUp())
+      PickUpObject();
+    else if (CanConnect())
     {
-      item = _highlightedObjects.First();
-      item.PickUp(objectHolder);
-      _carryObject = true;
+      print("*");
+      item.Connect(_highlightedObject);
     }
     
     if (Input.GetMouseButton(0))
-    {
-      if (item != null)
-      {
-        objectHolder.DetachChildren();
-        item.Throw();
-        _carryObject = false;
-      }
-    }
+      Throw();
 
     bool CanPickUp() => 
       Input.GetKeyDown(KeyCode.E) && _detectObject && !_carryObject;
+    
+    bool CanConnect() => 
+      Input.GetKeyDown(KeyCode.E) && _detectObject && _carryObject;
   }
 
+  private void PickUpObject()
+  {
+    item = _highlightedObject;
+    item.PickUp(objectHolder);
+    _carryObject = true;
+  }
+
+  private void Throw()
+  {
+    if (item != null)
+    {
+      objectHolder.DetachChildren();
+      item.Throw();
+      _carryObject = false;
+    }
+  }
+  
   private void SetHighlighted()
   {
     _detectObject = true;
-    _highlightedObjects.ForEach(p => p.OutlineOn());
+    _highlightedObject.OutlineOn();
   }
   
   private void ClearHighlighted()
   {
     _detectObject = false;
 
-    if (_highlightedObjects.Count > 0)
+    if (_highlightedObject != null)
     {
-      _highlightedObjects.ForEach(p => p.OutlineOff());
-      _highlightedObjects.Clear();
+      _highlightedObject.OutlineOff();
+      _highlightedObject = null;
     }
   }
 }
