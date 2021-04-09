@@ -72,7 +72,6 @@ public class PickableObject : MonoBehaviour
 
   private void ProjectionOff()
   {
-    //if (_projection != null)
       Destroy(_projection);
   }
 

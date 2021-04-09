@@ -11,7 +11,7 @@ public class PickUp : MonoBehaviour
 
   private bool _carryObject;
 
-  private List<PickableObject> _highlightedObjectsList = new List<PickableObject>();
+  public List<PickableObject> _highlightedObjectsList = new List<PickableObject>();
   private bool _detectObject;
   private LayerMask _layerMask;
 
@@ -27,19 +27,9 @@ public class PickUp : MonoBehaviour
       if (hit.collider.CompareTag("PickUp"))
       {
         var raycastedObject = hit.collider.gameObject.GetComponent<PickableObject>();
-        if (_highlightedObjectsList.Count > 0)
-        {
-          if (!_highlightedObjectsList.Contains(raycastedObject))
-          {
-            _highlightedObjectsList.Add(raycastedObject);
-            SetHighlighted();
-          }
-        }
-        else
-        {
-          _highlightedObjectsList.Add(raycastedObject);
-          SetHighlighted();
-        }
+
+        if (raycastedObject != null && raycastedObject != item && raycastedObject.IsHighlightable)
+          CheckObjectAndSetHighlight(raycastedObject);
       }
       else
         ClearHighlighted();
@@ -66,8 +56,26 @@ public class PickUp : MonoBehaviour
       Input.GetKeyDown(KeyCode.E) && _detectObject && !_carryObject;
 
     bool CanConnect() =>
-      item != null && _highlightedObjectsList.Count > 0 &&  item.IsConnectable && Input.GetMouseButton(0) && _detectObject && _carryObject &&
-      item != _highlightedObjectsList.Last() && _highlightedObjectsList.Last().IsHighlightable;
+      item != null && _highlightedObjectsList.Count > 0 &&  item.IsConnectable 
+      && Input.GetMouseButton(0) && _detectObject && _carryObject 
+      && item != _highlightedObjectsList.Last() && _highlightedObjectsList.Last().IsHighlightable;
+  }
+
+  private void CheckObjectAndSetHighlight(PickableObject raycastedObject)
+  {
+    if (_highlightedObjectsList.Count > 0)
+    {
+      if (!_highlightedObjectsList.Contains(raycastedObject))
+      {
+        _highlightedObjectsList.Add(raycastedObject);
+        SetHighlighted();
+      }
+    }
+    else
+    {
+      _highlightedObjectsList.Add(raycastedObject);
+      SetHighlighted();
+    }
   }
 
   private void PickUpObject()
@@ -109,9 +117,7 @@ public class PickUp : MonoBehaviour
     _detectObject = false;
 
     if (_highlightedObjectsList.Count > 0)
-    {
       _highlightedObjectsList.ForEach(p => p?.OutlineOff());
-    }
 
     _highlightedObjectsList.Clear();
     _highlightedObjectsList = new List<PickableObject>();
