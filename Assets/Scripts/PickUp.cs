@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
-  [SerializeField] private new Camera camera;
+  [SerializeField] private Camera camera;
   [SerializeField] private Transform objectHolder;
   [SerializeField] private PickableObject item;
   [SerializeField] private float pickUpDistance;
