@@ -65,6 +65,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475cd6addc19473695501a96f1d280a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectionCubePrefab: {fileID: 2973294406563897687, guid: cc89b90bb87041543a780431ee993f29,
+    type: 3}
   IsConnectable: 1
   IsHighlightable: 1
   TypeOfDetail: 0

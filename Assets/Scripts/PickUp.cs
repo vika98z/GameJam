@@ -11,7 +11,6 @@ public class PickUp : MonoBehaviour
 
   private bool _carryObject;
 
-  //private PickableObject _highlightedObject;
   private List<PickableObject> _highlightedObjectsList = new List<PickableObject>();
   private bool _detectObject;
   private LayerMask _layerMask;
@@ -30,7 +29,7 @@ public class PickUp : MonoBehaviour
         var raycastedObject = hit.collider.gameObject.GetComponent<PickableObject>();
         if (_highlightedObjectsList.Count > 0)
         {
-          if (raycastedObject != _highlightedObjectsList.Last())
+          if (!_highlightedObjectsList.Contains(raycastedObject))
           {
             _highlightedObjectsList.Add(raycastedObject);
             SetHighlighted();
@@ -85,13 +84,24 @@ public class PickUp : MonoBehaviour
       objectHolder.DetachChildren();
       item.Throw();
       _carryObject = false;
+
+      item = null;
     }
   }
 
   private void SetHighlighted()
   {
     _detectObject = true;
-    _highlightedObjectsList.Last().OutlineOn();
+    var curObjectToHighlight = _highlightedObjectsList.Last();
+    if (curObjectToHighlight)
+    {
+      curObjectToHighlight.OutlineOn();
+
+      if (item != null && curObjectToHighlight.IsConnected && curObjectToHighlight.IsHighlightable)
+      {
+        curObjectToHighlight.CreateProjection(item);
+      }
+    }
   }
 
   private void ClearHighlighted()
@@ -100,7 +110,7 @@ public class PickUp : MonoBehaviour
 
     if (_highlightedObjectsList.Count > 0)
     {
-      _highlightedObjectsList.ForEach(p => p.OutlineOff());
+      _highlightedObjectsList.ForEach(p => p?.OutlineOff());
     }
 
     _highlightedObjectsList.Clear();
