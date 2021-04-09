@@ -50,27 +50,23 @@ public class PickableObject : MonoBehaviour
 
     _rectanglePartPosition = parts[0].transform.position;
 
-    //_layerMask = ~ LayerMask.GetMask("Player");
     _layerMask = LayerMask.GetMask("LegoPart");
   }
 
   private void Update()
   {
-    //if (_picked && _canRotate)
+    if (Input.GetAxis("Mouse ScrollWheel") > 0)
     {
-      if (Input.GetAxis("Mouse ScrollWheel") > 0)
-      {
-        Angle += 45;
-        if (Angle % 90 == 0)
-          ChangeProjectionRotation(new Vector3(0, Angle, 0));
-      }
+      Angle += 45;
+      if (Angle % 90 == 0)
+        ChangeProjectionRotation(new Vector3(0, Angle, 0));
+    }
 
-      if (Input.GetAxis("Mouse ScrollWheel") < 0)
-      {
-        Angle -= 45;
-        if (Angle % 90 == 0)
-          ChangeProjectionRotation(new Vector3(0, Angle, 0));
-      }
+    if (Input.GetAxis("Mouse ScrollWheel") < 0)
+    {
+      Angle -= 45;
+      if (Angle % 90 == 0)
+        ChangeProjectionRotation(new Vector3(0, Angle, 0));
     }
 
     if (checkSideOfRecktangle)
@@ -79,12 +75,17 @@ public class PickableObject : MonoBehaviour
 
       if (Physics.Raycast(directionRay, out var hit, pickUpDistance, _layerMask))
       {
-        if (hit.collider.CompareTag("RectanglePart"))
+        if (hit.collider.CompareTag("RectanglePart") && hit.collider.gameObject.transform.parent.parent.GetComponent<PickableObject>().IsConnected)
         {
           var oldPos = _rectanglePartPosition;
           _rectanglePartPosition = hit.collider.gameObject.transform.position;
           if (oldPos != _rectanglePartPosition)
-            ChangeProjectionPosition(_rectanglePartPosition, projectionCubePrefab);
+          {
+            if (!_canRotate)
+              ChangeProjectionPosition(_rectanglePartPosition, projectionCubePrefab);
+            else
+              ChangeProjectionPosition(_rectanglePartPosition, projectionRectPrefab);
+          }
         }
       }
     }
@@ -186,6 +187,20 @@ public class PickableObject : MonoBehaviour
 
       return true;
     }
+    
+    //ставим прямоугольник на прямоугольник
+    if (TypeOfDetail == DetailType.Rectangle && other.TypeOfDetail == DetailType.Rectangle)
+    {
+      transform.position = other._rectanglePartPosition + new Vector3(0, _collider.size.y, 0);
+      transform.rotation = Quaternion.Euler(other._projectionRotation);
+      IsConnected = true;
+
+      ProjectionOff();
+
+      other.ConnectFromOther();
+
+      return true;
+    }
 
     return false;
   }
@@ -240,6 +255,23 @@ public class PickableObject : MonoBehaviour
       {
         var prefabCollider = projectionRectPrefab.GetComponent<BoxCollider>();
         var pos = transform.position + new Vector3(0, prefabCollider.size.y, 0);
+        //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
+        _projection = Instantiate(projectionRectPrefab, pos, Quaternion.identity);
+
+        _projection.transform.forward = transform.forward;
+      }
+    }
+    
+    //прямоугольник ставим на прямоугольник
+    else if (TypeOfDetail == DetailType.Rectangle && item.TypeOfDetail == DetailType.Rectangle)
+    {
+      _canRotate = true;
+      if (_projection == null)
+      {
+        checkSideOfRecktangle = true;
+        
+        var prefabCollider = projectionRectPrefab.GetComponent<BoxCollider>();
+        var pos = _rectanglePartPosition + new Vector3(0, prefabCollider.size.y, 0);
         //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
         _projection = Instantiate(projectionRectPrefab, pos, Quaternion.identity);
 
