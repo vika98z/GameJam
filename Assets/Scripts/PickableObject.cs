@@ -34,7 +34,8 @@ public class PickableObject : MonoBehaviour
   private bool checkSideOfRecktangle;
   private LayerMask _layerMask;
   public Vector3 _rectanglePartPosition;
-  
+  //сохраним на время ссылку на объекта в руках, чтобы перерисовывать проекцию
+  private PickableObject _itemForProjection;
 
   private void Awake()
   {
@@ -72,7 +73,12 @@ public class PickableObject : MonoBehaviour
       if (Physics.Raycast(directionRay, out var hit, pickUpDistance, _layerMask))
       {
         if (hit.collider.CompareTag("RectanglePart"))
+        {
+          var oldPos = _rectanglePartPosition;
           _rectanglePartPosition = hit.collider.gameObject.transform.position;
+          if (oldPos != _rectanglePartPosition)
+            ChangeProjectionPosition(_rectanglePartPosition);
+        }
       }
     }
   }
@@ -174,6 +180,8 @@ public class PickableObject : MonoBehaviour
 
   public void CreateProjection(PickableObject item)
   {
+    _itemForProjection = item;
+      
     //квадрат ставим на квадрат
     if (TypeOfDetail == DetailType.Cube && item.TypeOfDetail == DetailType.Cube)
     {
@@ -201,6 +209,15 @@ public class PickableObject : MonoBehaviour
         
         _projection.transform.forward = transform.forward;
       }
+    }
+  }
+
+  private void ChangeProjectionPosition(Vector3 newpos)
+  {
+    if (_projection != null)
+    {
+      var prefabCollider = projectionCubePrefab.GetComponent<BoxCollider>();
+      _projection.transform.position = newpos + new Vector3(0, prefabCollider.size.y, 0);;
     }
   }
 }
