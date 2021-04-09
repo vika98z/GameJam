@@ -10,6 +10,7 @@ public class PickUp : MonoBehaviour
   [SerializeField] private float pickUpDistance;
 
   private bool _carryObject;
+
   //private PickableObject _highlightedObject;
   private List<PickableObject> _highlightedObjectsList = new List<PickableObject>();
   private bool _detectObject;
@@ -48,9 +49,16 @@ public class PickUp : MonoBehaviour
       ClearHighlighted();
 
     if (CanPickUp())
-      PickUpObject();
+    {
+      if (!_highlightedObjectsList.Last().IsConnected && _highlightedObjectsList.Last().IsHighlightable)
+        PickUpObject();
+    }
     else if (CanConnect())
-      item.Connect(_highlightedObjectsList.Last());
+    {
+      if (item.Connect(_highlightedObjectsList.Last()))
+        Throw();
+      return;
+    }
 
     if (Input.GetMouseButton(0))
       Throw();
@@ -59,7 +67,8 @@ public class PickUp : MonoBehaviour
       Input.GetKeyDown(KeyCode.E) && _detectObject && !_carryObject;
 
     bool CanConnect() =>
-      Input.GetKeyDown(KeyCode.E) && _detectObject && _carryObject && item != _highlightedObjectsList.Last();
+      item != null && _highlightedObjectsList.Count > 0 &&  item.IsConnectable && Input.GetMouseButton(0) && _detectObject && _carryObject &&
+      item != _highlightedObjectsList.Last() && _highlightedObjectsList.Last().IsHighlightable;
   }
 
   private void PickUpObject()
@@ -93,6 +102,7 @@ public class PickUp : MonoBehaviour
     {
       _highlightedObjectsList.ForEach(p => p.OutlineOff());
     }
+
     _highlightedObjectsList.Clear();
     _highlightedObjectsList = new List<PickableObject>();
   }
