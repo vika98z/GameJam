@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum DetailType
 {
@@ -10,9 +9,10 @@ public enum DetailType
 public class PickableObject : MonoBehaviour
 {
   [SerializeField] private GameObject projectionCubePrefab;
+  [SerializeField] private GameObject projectionRectPrefab;
   [SerializeField] private float pickUpDistance;
   [SerializeField] private GameObject[] parts;
-  
+
   public Camera MainCamera { get; set; }
   public bool IsConnectable;
   public bool IsHighlightable;
@@ -27,15 +27,20 @@ public class PickableObject : MonoBehaviour
 
   public GameObject _projection;
 
-  public int Sign = 1;
-  public float tempSign = 1;
-  
+  public int Angle = 0;
+
   //для установки квадрата на прямоугольник
   private bool checkSideOfRecktangle;
   private LayerMask _layerMask;
+
   public Vector3 _rectanglePartPosition;
+
   //сохраним на время ссылку на объекта в руках, чтобы перерисовывать проекцию
   private PickableObject _itemForProjection;
+
+  //для установки прямоугольника на что-либо
+  private bool _canRotate;
+  public Vector3 _projectionRotation;
 
   private void Awake()
   {
@@ -44,26 +49,28 @@ public class PickableObject : MonoBehaviour
     _collider = GetComponent<BoxCollider>();
 
     _rectanglePartPosition = parts[0].transform.position;
-    
+
     //_layerMask = ~ LayerMask.GetMask("Player");
     _layerMask = LayerMask.GetMask("LegoPart");
   }
 
   private void Update()
   {
-    if (_picked)
+    //if (_picked && _canRotate)
     {
       if (Input.GetAxis("Mouse ScrollWheel") > 0)
       {
-        tempSign += .5f;
+        Angle += 45;
+        if (Angle % 90 == 0)
+          ChangeProjectionRotation(new Vector3(0, Angle, 0));
       }
 
       if (Input.GetAxis("Mouse ScrollWheel") < 0)
       {
-        tempSign -= .5f;
+        Angle -= 45;
+        if (Angle % 90 == 0)
+          ChangeProjectionRotation(new Vector3(0, Angle, 0));
       }
-
-      tempSign = Mathf.Clamp(tempSign, -1, 1);
     }
 
     if (checkSideOfRecktangle)
@@ -77,7 +84,7 @@ public class PickableObject : MonoBehaviour
           var oldPos = _rectanglePartPosition;
           _rectanglePartPosition = hit.collider.gameObject.transform.position;
           if (oldPos != _rectanglePartPosition)
-            ChangeProjectionPosition(_rectanglePartPosition);
+            ChangeProjectionPosition(_rectanglePartPosition, projectionCubePrefab);
         }
       }
     }
@@ -129,7 +136,7 @@ public class PickableObject : MonoBehaviour
 
   private void ProjectionOff()
   {
-    checkSideOfRecktangle = false;
+    checkSideOfRecktangle = _canRotate = false;
     Destroy(_projection);
   }
 
@@ -155,8 +162,22 @@ public class PickableObject : MonoBehaviour
     {
       transform.position = other._rectanglePartPosition + new Vector3(0, _collider.size.y, 0);
       //other.transform.position + new Vector3(Sign * _collider.size.x / 2,
-        //other._collider.size.y / 2 + _collider.size.y / 2, 0);
+      //other._collider.size.y / 2 + _collider.size.y / 2, 0);
       transform.forward = other.transform.forward;
+      IsConnected = true;
+
+      ProjectionOff();
+
+      other.ConnectFromOther();
+
+      return true;
+    }
+
+    //ставим прямоугольник на квадрат. проверка в прямоугольнике - значит берем позицию установки из квадрата
+    if (TypeOfDetail == DetailType.Rectangle && other.TypeOfDetail == DetailType.Cube)
+    {
+      transform.position = other.transform.position + new Vector3(0, _collider.size.y, 0);
+      transform.rotation = Quaternion.Euler(other._projectionRotation);
       IsConnected = true;
 
       ProjectionOff();
@@ -181,7 +202,7 @@ public class PickableObject : MonoBehaviour
   public void CreateProjection(PickableObject item)
   {
     _itemForProjection = item;
-      
+
     //квадрат ставим на квадрат
     if (TypeOfDetail == DetailType.Cube && item.TypeOfDetail == DetailType.Cube)
     {
@@ -204,20 +225,44 @@ public class PickableObject : MonoBehaviour
         //
         var prefabCollider = projectionCubePrefab.GetComponent<BoxCollider>();
         var pos = _rectanglePartPosition + new Vector3(0, prefabCollider.size.y, 0);
-          //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
+        //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
         _projection = Instantiate(projectionCubePrefab, pos, Quaternion.identity);
-        
+
+        _projection.transform.forward = transform.forward;
+      }
+    }
+
+    //прямоугольник ставим на квадрат. проверка в квадрате!
+    else if (TypeOfDetail == DetailType.Cube && item.TypeOfDetail == DetailType.Rectangle)
+    {
+      _canRotate = true;
+      if (_projection == null)
+      {
+        var prefabCollider = projectionRectPrefab.GetComponent<BoxCollider>();
+        var pos = transform.position + new Vector3(0, prefabCollider.size.y, 0);
+        //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
+        _projection = Instantiate(projectionRectPrefab, pos, Quaternion.identity);
+
         _projection.transform.forward = transform.forward;
       }
     }
   }
 
-  private void ChangeProjectionPosition(Vector3 newpos)
+  private void ChangeProjectionPosition(Vector3 newpos, GameObject prefab)
   {
     if (_projection != null)
     {
-      var prefabCollider = projectionCubePrefab.GetComponent<BoxCollider>();
-      _projection.transform.position = newpos + new Vector3(0, prefabCollider.size.y, 0);;
+      var prefabCollider = prefab.GetComponent<BoxCollider>();
+      _projection.transform.position = newpos + new Vector3(0, prefabCollider.size.y, 0);
+    }
+  }
+
+  private void ChangeProjectionRotation(Vector3 newrot)
+  {
+    if (_projection != null && _canRotate)
+    {
+      _projection.transform.rotation = Quaternion.Euler(newrot);
+      _projectionRotation = newrot;
     }
   }
 }

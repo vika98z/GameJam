@@ -56,9 +56,9 @@ public class PickUp : MonoBehaviour
       Input.GetKeyDown(KeyCode.E) && _detectObject && !_carryObject;
 
     bool CanConnect() =>
-      item != null && _highlightedObjectsList.Count > 0 &&  item.IsConnectable 
+      item != null && _highlightedObjectsList.Count > 0 && item.IsConnectable
       && Input.GetMouseButton(0) && _detectObject && _carryObject 
-      && item != _highlightedObjectsList.Last() && _highlightedObjectsList.Last().IsHighlightable;
+      && item != _highlightedObjectsList.Last() && _highlightedObjectsList.Last().IsHighlightable && _highlightedObjectsList.Last().IsConnected;
   }
 
   private void CheckObjectAndSetHighlight(PickableObject raycastedObject)
