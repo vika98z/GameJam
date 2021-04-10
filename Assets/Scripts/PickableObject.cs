@@ -14,6 +14,8 @@ public class PickableObject : MonoBehaviour
   [SerializeField] private GameObject[] parts;
 
   public Camera MainCamera { get; set; }
+  public Player Player { get; set; }
+  
   public bool IsConnectable;
   public bool IsHighlightable;
   public DetailType TypeOfDetail;
@@ -73,7 +75,10 @@ public class PickableObject : MonoBehaviour
     {
       var directionRay = MainCamera.ScreenPointToRay(Input.mousePosition);
 
-      if (Physics.Raycast(directionRay, out var hit, pickUpDistance, _layerMask))
+      var distance = pickUpDistance + 
+                     Vector3.Distance(Player.transform.position, MainCamera.transform.position);
+      
+      if (Physics.Raycast(directionRay, out var hit, distance, _layerMask))
       {
         if (hit.collider.CompareTag("RectanglePart") && hit.collider.gameObject.transform.parent.parent.GetComponent<PickableObject>().IsConnected)
         {

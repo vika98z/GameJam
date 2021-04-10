@@ -27,13 +27,20 @@ public class PickUp : MonoBehaviour
   private void Update()
   {
     var directionRay = camera.ScreenPointToRay(Input.mousePosition);
-
-    if (Physics.Raycast(directionRay, out var hit, pickUpDistance, _layerMask))
+    
+    var distance = pickUpDistance + 
+                   Vector3.Distance(transform.position, camera.transform.position);
+      
+    if (Physics.Raycast(directionRay, out var hit, distance, _layerMask))
     {
-      if (hit.collider.CompareTag("PickUp"))
+      print(hit.collider.name);
+      if (hit.collider.CompareTag("PickUp") || hit.collider.CompareTag("RectanglePart"))
       {
         var raycastedObject = hit.collider.gameObject.GetComponent<PickableObject>();
 
+        if (hit.collider.CompareTag("RectanglePart"))
+          raycastedObject = hit.collider.gameObject.transform.parent.parent.GetComponent<PickableObject>();
+        
         if (raycastedObject != null && raycastedObject != item && raycastedObject.IsHighlightable)
         {
           if (CanConnect())

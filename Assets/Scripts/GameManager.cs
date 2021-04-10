@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private PickableObject[] pickableObjects;
     [SerializeField] private Camera camera;
+    [SerializeField] private Player player;
     [SerializeField] private Text helpText;
 
     public bool IsHelping = true;
@@ -15,7 +16,10 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         foreach (var pickableObject in pickableObjects)
+        {
             pickableObject.MainCamera = camera;
+            pickableObject.Player = player;
+        }
     }
 
     public void SetHelpText(string message)
