@@ -41,8 +41,14 @@ public class PickUp : MonoBehaviour
         if (hit.collider.CompareTag("RectanglePart"))
           raycastedObject = hit.collider.gameObject.transform.parent.parent.GetComponent<PickableObject>();
         
+        if (_highlightedObjectsList.Count > 1)
+          ClearHighlighted();
+        
         if (raycastedObject != null && raycastedObject != item && raycastedObject.IsHighlightable)
         {
+          CheckObjectAndSetHighlight(raycastedObject);
+
+          
           if (CanConnect())
           {
             if (item.TypeOfDetail == DetailType.Cube)
@@ -52,8 +58,10 @@ public class PickUp : MonoBehaviour
           }
           else if (CanPickUp())
             gameManager.SetHelpText(pickUpText);
-          
-          CheckObjectAndSetHighlight(raycastedObject);
+          else
+          {
+            ClearHighlighted();
+          }
         }
       }
       else

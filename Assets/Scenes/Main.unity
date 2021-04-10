@@ -2831,7 +2831,7 @@ MonoBehaviour:
     type: 3}
   projectionRectPrefab: {fileID: 8926018886600978210, guid: b896bff0ffc8a2e4eb0e0a992564d7e9,
     type: 3}
-  pickUpDistance: 13
+  pickUpDistance: 3
   parts:
   - {fileID: 832337584}
   - {fileID: 202699843}
@@ -4021,7 +4021,7 @@ MonoBehaviour:
     type: 3}
   projectionRectPrefab: {fileID: 8926018886600978210, guid: b896bff0ffc8a2e4eb0e0a992564d7e9,
     type: 3}
-  pickUpDistance: 13
+  pickUpDistance: 3
   parts:
   - {fileID: 1720010974}
   IsConnectable: 1
@@ -4443,7 +4443,7 @@ MonoBehaviour:
     type: 3}
   projectionRectPrefab: {fileID: 8926018886600978210, guid: b896bff0ffc8a2e4eb0e0a992564d7e9,
     type: 3}
-  pickUpDistance: 13
+  pickUpDistance: 3
   parts:
   - {fileID: 959053881118412524}
   IsConnectable: 1
@@ -5253,7 +5253,7 @@ PrefabInstance:
     - target: {fileID: 4439156075456299625, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.122183256
+      value: 0.12218323
       objectReference: {fileID: 0}
     - target: {fileID: 4439156075456299625, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
@@ -5263,12 +5263,12 @@ PrefabInstance:
     - target: {fileID: 4439156075456299625, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 2.4198927e-15
+      value: -0.000000030489364
       objectReference: {fileID: 0}
     - target: {fileID: 4439156075456299625, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -1.6126688e-16
+      value: 0.0000000037534114
       objectReference: {fileID: 0}
     - target: {fileID: 6903128240878455108, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
@@ -5288,12 +5288,12 @@ PrefabInstance:
     - target: {fileID: 6903128240878455108, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000000042856407
+      value: 0.0000000042856403
       objectReference: {fileID: 0}
     - target: {fileID: 6903128240878455108, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 3.701516e-10
+      value: -3.7015158e-10
       objectReference: {fileID: 0}
     - target: {fileID: 6903128240878455108, guid: 73f8923613b64874cbc2cc1e363aafc4,
         type: 3}
@@ -5482,7 +5482,7 @@ MonoBehaviour:
     type: 3}
   projectionRectPrefab: {fileID: 8926018886600978210, guid: b896bff0ffc8a2e4eb0e0a992564d7e9,
     type: 3}
-  pickUpDistance: 13
+  pickUpDistance: 3
   parts:
   - {fileID: 4724248864183062085}
   - {fileID: 8757431674389703590}

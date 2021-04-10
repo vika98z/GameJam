@@ -69,7 +69,7 @@ MonoBehaviour:
     type: 3}
   projectionRectPrefab: {fileID: 8926018886600978210, guid: b896bff0ffc8a2e4eb0e0a992564d7e9,
     type: 3}
-  pickUpDistance: 13
+  pickUpDistance: 3
   parts:
   - {fileID: 2928588638623969547}
   - {fileID: 1198851558159226088}
@@ -78,9 +78,9 @@ MonoBehaviour:
   TypeOfDetail: 1
   IsConnected: 0
   _projection: {fileID: 0}
-  Sign: 1
-  tempSign: 1
+  Angle: 0
   _rectanglePartPosition: {x: 0, y: 0, z: 0}
+  _projectionRotation: {x: 0, y: 0, z: 0}
 --- !u!65 &335603121096761741
 BoxCollider:
   m_ObjectHideFlags: 0
