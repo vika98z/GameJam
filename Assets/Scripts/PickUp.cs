@@ -33,7 +33,6 @@ public class PickUp : MonoBehaviour
       
     if (Physics.Raycast(directionRay, out var hit, distance, _layerMask))
     {
-      print(hit.collider.name);
       if (hit.collider.CompareTag("PickUp") || hit.collider.CompareTag("RectanglePart"))
       {
         var raycastedObject = hit.collider.gameObject.GetComponent<PickableObject>();
