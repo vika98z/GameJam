@@ -9,12 +9,17 @@ public class Player : MonoBehaviour
   [SerializeField] private float turnSmoothTime = 0.1f;
   [SerializeField] private Transform cam;
   [SerializeField] private float pushPower = 2f;
+  
+  [SerializeField] private Animator animator;
+  [SerializeField] private float startAnimTime = 0.3f;
+  [SerializeField] private float stopAnimTime = 0.15f;
 
   private CharacterController _controller;
 
   private Vector3 _playerVelocity;
   private bool _groundedPlayer;
   private float _turnSmoothVelocity;
+  private readonly float allowPlayerRotation = 0.1f;
 
   private void Awake() =>
     _controller = GetComponent<CharacterController>();
@@ -37,10 +42,28 @@ public class Player : MonoBehaviour
   {
     float vertical = Input.GetAxis("Vertical");
     float horizontal = Input.GetAxis("Horizontal");
+    
+
+    
 
     _groundedPlayer = _controller.isGrounded;
     if (_groundedPlayer && _playerVelocity.y < 0)
       _playerVelocity.y = 0f;
+    
+    var animSpeed = new Vector2(horizontal, vertical).sqrMagnitude;
+
+    if (_groundedPlayer)
+    {
+      if (animSpeed > allowPlayerRotation) 
+        animator.SetFloat ("Blend", animSpeed, startAnimTime, Time.deltaTime);
+      else if (animSpeed < allowPlayerRotation) 
+        animator.SetFloat ("Blend", animSpeed, stopAnimTime, Time.deltaTime);
+    }
+    else
+    {
+      animator.SetFloat ("Blend", 0, startAnimTime, Time.deltaTime);
+
+    }
 
     Vector3 direction = new Vector3(horizontal, 0, vertical);
 
@@ -56,7 +79,9 @@ public class Player : MonoBehaviour
     }
 
     if (Input.GetButtonDown("Jump") && _groundedPlayer)
+    {
       _playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * GravityValue);
+    }
 
     _playerVelocity.y += GravityValue * Time.deltaTime;
     _controller.Move(_playerVelocity * Time.deltaTime);
