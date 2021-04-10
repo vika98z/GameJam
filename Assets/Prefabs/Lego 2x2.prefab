@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6933789222747806452}
   m_Layer: 10
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: PickUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,9 +94,10 @@ GameObject:
   - component: {fileID: 2998817102528922485}
   - component: {fileID: 3068482345659082448}
   - component: {fileID: 5929265808897579777}
+  - component: {fileID: 6104952710698248560}
   m_Layer: 10
   m_Name: Cylinder (3)
-  m_TagString: Untagged
+  m_TagString: RectanglePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,9 +109,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2370192975888304388}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.257, y: 0.6055, z: -0.257}
-  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.30010578}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.257, y: 0.6055, z: -0.25700003}
+  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.3001058}
   m_Children: []
   m_Father: {fileID: 544316139348969990}
   m_RootOrder: 3
@@ -162,6 +163,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &6104952710698248560
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2370192975888304388}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 1.9999998, z: 1.0000002}
+  m_Center: {x: 0.000000059604645, y: 0.00000047683716, z: -0.00000020861626}
 --- !u!1 &4217646119181744925
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,9 +296,10 @@ GameObject:
   - component: {fileID: 3703612574300032601}
   - component: {fileID: 6106530498079647369}
   - component: {fileID: 4637002232098414242}
+  - component: {fileID: 4195592774487350162}
   m_Layer: 10
   m_Name: Cylinder (2)
-  m_TagString: Untagged
+  m_TagString: RectanglePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -296,9 +311,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7288710145017512711}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.257, y: 0.6055, z: 0.253}
-  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.30010578}
+  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.3001058}
   m_Children: []
   m_Father: {fileID: 544316139348969990}
   m_RootOrder: 2
@@ -350,6 +365,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &4195592774487350162
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7288710145017512711}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 1.9999998, z: 1.0000002}
+  m_Center: {x: 0.000000059604645, y: 0.00000047683716, z: -0.000000029802322}
 --- !u!1 &8044248453216158487
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,9 +389,10 @@ GameObject:
   - component: {fileID: 5571526624897889446}
   - component: {fileID: 5601276632571883056}
   - component: {fileID: 8675128049676872465}
+  - component: {fileID: 2754088490559078683}
   m_Layer: 10
   m_Name: Cylinder (1)
-  m_TagString: Untagged
+  m_TagString: RectanglePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -375,9 +404,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8044248453216158487}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.257, y: 0.6055, z: -0.257}
-  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.30010578}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.257, y: 0.6055, z: -0.25700003}
+  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.3001058}
   m_Children: []
   m_Father: {fileID: 544316139348969990}
   m_RootOrder: 1
@@ -429,6 +458,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &2754088490559078683
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8044248453216158487}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 1.9999998, z: 1.0000002}
+  m_Center: {x: 0.000000059604645, y: 0.00000047683716, z: -0.00000020861626}
 --- !u!1 &8060604366079480393
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,9 +482,10 @@ GameObject:
   - component: {fileID: 8178557174622980777}
   - component: {fileID: 2872523603015892311}
   - component: {fileID: 1715212452055489969}
+  - component: {fileID: 8567088441986422963}
   m_Layer: 10
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: RectanglePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -454,9 +497,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8060604366079480393}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.257, y: 0.6055, z: 0.253}
-  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.30010578}
+  m_LocalScale: {x: 0.30010563, y: 0.10864238, z: 0.3001058}
   m_Children: []
   m_Father: {fileID: 544316139348969990}
   m_RootOrder: 0
@@ -508,3 +551,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &8567088441986422963
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8060604366079480393}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 1.9999998, z: 1.0000002}
+  m_Center: {x: 0.000000059604645, y: 0.00000047683716, z: -0.000000029802322}
