@@ -1,40 +1,38 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ButtonController : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
+  [SerializeField] private AudioClip buttonSound;
+  [SerializeField] private GameObject button;
+  [SerializeField] private Player player;
 
-    public bool push;
-    public bool unPush;
+  public int NumberOfButton;
+  
+  private AudioSource _audioSource;
 
-    
+  private bool _canPush = true;
+  private bool _buttonHit;
 
-    private void OnCollisionEnter(Collision other)
-    {
-        print(other.gameObject.name);
-        if (other.gameObject.tag == "Player")
-        {
-            //push = true;
-            //unPush = false;
-            
-            animator.SetTrigger("Push 0");
-            //animator.SetBool("UnPush", unPush);
-        }
-    }
+  private float _buttonDownDistance = 0.16f;
 
-    private void OnCollisionExit(Collision other)
-    {
-        print(other.gameObject.name);
+  private void Start()
+  {
+    _audioSource = gameObject.AddComponent<AudioSource>();
+    player.OnButtonPressed += _ => _buttonHit = true;
+  }
 
-        if (other.gameObject.tag == "Player")
-        {
-            //unPush = true;
-            //push = false;
-            animator.SetTrigger("UnPush 0");
+  private void Update()
+  {
+    if (!_buttonHit || ! _canPush) return;
 
-            //animator.SetBool("Push", push);
-            // animator.SetBool("UnPush", unPush);
-        }
-    }
+    if (buttonSound)
+      _audioSource.PlayOneShot(buttonSound);
+
+    _buttonHit = false;
+    _canPush = false;
+
+    var buttonPosition = button.transform.position;
+    buttonPosition = new Vector3(buttonPosition.x, buttonPosition.y - _buttonDownDistance, buttonPosition.z);
+    button.transform.position = buttonPosition;
+  }
 }

@@ -8,6 +8,8 @@ TagManager:
   - RectangleLeft
   - RectangleRight
   - RectanglePart
+  - PlayerEyes
+  - Button
   layers:
   - Default
   - TransparentFX
