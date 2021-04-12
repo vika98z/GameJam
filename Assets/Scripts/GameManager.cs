@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
   [SerializeField] private GameObject GameOverPanel;
   [SerializeField] private GameObject StartHelpPanel;
 
+  [SerializeField] private GameObject[] LegoCases;
+
 
   public bool IsHelping = true;
 
@@ -62,24 +64,31 @@ public class GameManager : MonoBehaviour
     var level = PlayerPrefs.GetInt("Level");
 
     if (level == 0)
+    {
+      level = 2;
       PlayerPrefs.SetInt("Level", 2);
+    }
     else if (level <= 3)
     {
       level++;
       PlayerPrefs.SetInt("Level", level);
     }
     else
+    {
       GameOver();
+      return;
+    }
 
     PlayerPrefs.SetInt("Button", num);
 
-    ResultOfLevel(level, num);
+    ResultOfLevel(level);
 
     PlayerPrefs.Save();
   }
 
-  private void ResultOfLevel(int level, int num)
+  private void ResultOfLevel(int level)
   {
+    var num = PlayerPrefs.GetInt("Button");
     resultCanvas.SetActive(true);
     switch (level)
     {
@@ -120,7 +129,8 @@ public class GameManager : MonoBehaviour
         {
           //good - blue
           case 0:
-            resultText.text = "Wonderful! You made right choice! And as reward you get magnetic hands! On this level you can pull blocks from top of your path!";
+            resultText.text = "Wonderful! You made right choice! And as reward you get magnetic hands! On this level you can pull blocks that are much further away from you!";
+            PlayerPrefs.SetInt("Distance", 30);
             break;
           //bad - red
           case 1:
@@ -146,10 +156,16 @@ public class GameManager : MonoBehaviour
   private void LoadLevelSettings()
   {
     if (PlayerPrefs.GetInt("Level") == 0)
+    {
+      LegoCases[0].SetActive(true);
       SetStartHelp();
+      return;
+    }
     switch (PlayerPrefs.GetInt("Level"))
     {
       case 2:
+        LegoCases[1].SetActive(true);
+
         switch (PlayerPrefs.GetInt("Button"))
         {
           //bad - blue
@@ -165,6 +181,8 @@ public class GameManager : MonoBehaviour
         break;
 
       case 3:
+        LegoCases[2].SetActive(true);
+
         switch (PlayerPrefs.GetInt("Button"))
         {
           //good - blue
@@ -188,24 +206,15 @@ public class GameManager : MonoBehaviour
         break;
 
       case 4:
+        LegoCases[3].SetActive(true);
+
         switch (PlayerPrefs.GetInt("Button"))
         {
           case 0:
-            player.Distance = 20;
+            //player.Distance = PlayerPrefs.GetInt("Distance");
             break;
           case 1:
             player.speed = 3;
-            break;
-        }
-
-        break;
-
-      case 5:
-        switch (PlayerPrefs.GetInt("Button"))
-        {
-          case 0:
-            break;
-          case 1:
             break;
         }
 
@@ -230,7 +239,7 @@ public class GameManager : MonoBehaviour
         if (pauseMenu.activeSelf)
           Resume();
       }
-      else
+      else if (Time.timeScale > 0.5f)
       {
         Pause();
       }

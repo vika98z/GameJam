@@ -23,7 +23,13 @@ public class PickUp : MonoBehaviour
 
   private void Awake()
   {
-    pickUpDistance = GetComponent<Player>().Distance;
+    var dist = PlayerPrefs.GetInt("Distance");
+    if (dist > 0)
+      pickUpDistance = dist;
+    else
+    {
+      pickUpDistance = 1.5f;
+    }
     _layerMask = ~ LayerMask.GetMask("Player");
   }
 

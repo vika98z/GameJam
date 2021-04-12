@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
   
   public Action<int> OnButtonPressed;
 
-  public float Distance = 1.5f;
+  private float Distance = 1.5f;
 
   private CharacterController _controller;
 
@@ -34,6 +34,17 @@ public class Player : MonoBehaviour
   {
     _controller = GetComponent<CharacterController>();
     _audioSource = GetComponent<AudioSource>();
+  }
+
+  private void Start()
+  {
+    var dist = PlayerPrefs.GetInt("Distance");
+    if (dist > 0)
+      Distance = dist;
+    else
+    {
+      Distance = 1.5f;
+    }
   }
 
   private void Update() =>

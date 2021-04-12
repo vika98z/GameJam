@@ -116,7 +116,14 @@ public class PickableObject : MonoBehaviour
   {
     OutlineOff();
     _audioSource = Player.GetComponent<AudioSource>();
-    pickUpDistance = Player.Distance;
+    
+    var dist = PlayerPrefs.GetInt("Distance");
+    if (dist > 0)
+      pickUpDistance = dist;
+    else
+    {
+      pickUpDistance = 1.5f;
+    }
   }
 
   public void PickUp(Transform holdObject)
