@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
   private const float GravityValue = -9.81f;
 
-  [SerializeField] private float speed;
+  [SerializeField] public float speed;
   [SerializeField] private float jumpHeight;
   [SerializeField] private float turnSmoothTime = 0.1f;
   [SerializeField] private Transform cam;
@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
   [SerializeField] private AudioClip jumpClip;
   
   public Action<int> OnButtonPressed;
+
+  public float Distance = 1.5f;
 
   private CharacterController _controller;
 

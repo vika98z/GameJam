@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -24,6 +21,10 @@ public class GameManager : MonoBehaviour
   [SerializeField] private GameObject loadingScreen;
   [SerializeField] private GameObject resultCanvas;
   [SerializeField] private Text resultText;
+  
+  [SerializeField] private GameObject GameOverPanel;
+  [SerializeField] private GameObject StartHelpPanel;
+
 
   public bool IsHelping = true;
 
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     Time.timeScale = 1f;
 
     RenderSettings.fog = false;
+    
 
     foreach (var pickableObject in pickableObjects)
     {
@@ -61,7 +63,7 @@ public class GameManager : MonoBehaviour
 
     if (level == 0)
       PlayerPrefs.SetInt("Level", 2);
-    else if (level < 3)
+    else if (level <= 3)
     {
       level++;
       PlayerPrefs.SetInt("Level", level);
@@ -86,13 +88,11 @@ public class GameManager : MonoBehaviour
         {
           //bad - blue
           case 0:
-            //RenderSettings.fog = true;
             resultText.text =
               "Ups, you didn’t guess. That’s why a thick fog descended on the room. But we believe in you! Next time you’re gonna be like!";
             break;
           //good - red
           case 1:
-            //player.SetBigJump();
             resultText.text = "Wonderful! You made right choice! And as reward you get ability to jump 2 times higher!";
             break;
         }
@@ -104,19 +104,28 @@ public class GameManager : MonoBehaviour
         {
           //good - blue
           case 0:
-            //bigPartOfCubes.SetActive(true);
-            //staticCube.SetActive(false);
             resultText.text = "Wonderful! You made right choice! And as reward you get already prepared half of path!";
             break;
           //bad - red
           case 1:
-            //pointLights.SetActive(false);
-            //var rotation = dirLight.transform.rotation;
-            //rotation = Quaternion.Euler(_lightningXPosNight, rotation.y, rotation.z);
-            //dirLight.transform.rotation = rotation;
             resultText.text =
-              "Ups, you didn’t guess. That’s why 4.	night has fallen and you can see worse… But we believe in you! Next time you’re gonna be like!";
+              "Ups, you didn’t guess. That’s why night has fallen and you can see worse… But we believe in you! Next time you’re gonna be like!";
+            break;
+        }
 
+        break;
+        
+      case 4:
+        switch (num)
+        {
+          //good - blue
+          case 0:
+            resultText.text = "Wonderful! You made right choice! And as reward you get magnetic hands! On this level you can pull blocks from top of your path!";
+            break;
+          //bad - red
+          case 1:
+            resultText.text =
+              "Ups, you didn’t guess. That’s why you walk twice as slow. But we believe in you! Next time you’re gonna be like!";
             break;
         }
 
@@ -124,14 +133,11 @@ public class GameManager : MonoBehaviour
     }
   }
 
-  public void Reload()
-  {
+  public void Reload() => 
     StartCoroutine(LoadAsync("Room"));
-  }
 
-  private void GameOver()
-  {
-  }
+  private void GameOver() => 
+    GameOverPanel.SetActive(true);
 
   private void Start() =>
     LoadLevelSettings();
@@ -139,6 +145,8 @@ public class GameManager : MonoBehaviour
   //blue button = 0, red = 1
   private void LoadLevelSettings()
   {
+    if (PlayerPrefs.GetInt("Level") == 0)
+      SetStartHelp();
     switch (PlayerPrefs.GetInt("Level"))
     {
       case 2:
@@ -170,6 +178,10 @@ public class GameManager : MonoBehaviour
             var rotation = dirLight.transform.rotation;
             rotation = Quaternion.Euler(_lightningXPosNight, rotation.y, rotation.z);
             dirLight.transform.rotation = rotation;
+
+            RenderSettings.fog = true;
+            RenderSettings.fogColor = Color.black;
+            RenderSettings.fogDensity = 0.09f;
             break;
         }
 
@@ -179,8 +191,10 @@ public class GameManager : MonoBehaviour
         switch (PlayerPrefs.GetInt("Button"))
         {
           case 0:
+            player.Distance = 20;
             break;
           case 1:
+            player.speed = 3;
             break;
         }
 
@@ -197,6 +211,14 @@ public class GameManager : MonoBehaviour
 
         break;
     }
+  }
+
+  private void SetStartHelp()
+  {
+    Time.timeScale = 0f;
+    Cursor.visible = true;
+    Cursor.lockState = CursorLockMode.None;
+    StartHelpPanel.SetActive(true);
   }
 
   private void Update()

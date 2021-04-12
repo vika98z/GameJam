@@ -21,8 +21,11 @@ public class PickUp : MonoBehaviour
   private bool _detectObject;
   private LayerMask _layerMask;
 
-  private void Awake() =>
+  private void Awake()
+  {
+    pickUpDistance = GetComponent<Player>().Distance;
     _layerMask = ~ LayerMask.GetMask("Player");
+  }
 
   private void Update()
   {

@@ -16,7 +16,7 @@ public class PickableObject : MonoBehaviour
 
   public Camera MainCamera { get; set; }
   public Player Player { get; set; }
-  
+
   public bool IsConnectable;
   public bool IsHighlightable;
   public DetailType TypeOfDetail;
@@ -44,7 +44,7 @@ public class PickableObject : MonoBehaviour
   //для установки прямоугольника на что-либо
   private bool _canRotate;
   public Vector3 _projectionRotation;
-  
+
   private AudioSource _audioSource;
 
   private void Awake()
@@ -58,7 +58,6 @@ public class PickableObject : MonoBehaviour
     _layerMask = LayerMask.GetMask("LegoPart");
   }
 
-  
   private void Update()
   {
     if (_canRotate)
@@ -67,7 +66,7 @@ public class PickableObject : MonoBehaviour
       {
         Angle += 45;
         Angle %= 360;
-      
+
         if (Angle % 90 == 0)
           ChangeProjectionRotation(new Vector3(0, Angle, 0));
       }
@@ -85,18 +84,19 @@ public class PickableObject : MonoBehaviour
     {
       Angle = 0;
     }
-    
+
 
     if (checkSideOfRecktangle)
     {
       var directionRay = MainCamera.ScreenPointToRay(Input.mousePosition);
 
-      var distance = pickUpDistance + 
+      var distance = pickUpDistance +
                      Vector3.Distance(Player.transform.position, MainCamera.transform.position);
-      
+
       if (Physics.Raycast(directionRay, out var hit, distance, _layerMask))
       {
-        if (hit.collider.CompareTag("RectanglePart") && hit.collider.gameObject.transform.parent.parent.GetComponent<PickableObject>().IsConnected)
+        if (hit.collider.CompareTag("RectanglePart") && hit.collider.gameObject.transform.parent.parent
+          .GetComponent<PickableObject>().IsConnected)
         {
           var oldPos = _rectanglePartPosition;
           _rectanglePartPosition = hit.collider.gameObject.transform.position;
@@ -116,6 +116,7 @@ public class PickableObject : MonoBehaviour
   {
     OutlineOff();
     _audioSource = Player.GetComponent<AudioSource>();
+    pickUpDistance = Player.Distance;
   }
 
   public void PickUp(Transform holdObject)
@@ -130,7 +131,7 @@ public class PickableObject : MonoBehaviour
     _rigidbody.useGravity = false;
 
     _picked = true;
-    
+
     _audioSource.PlayOneShot(cubeSound);
 
     OutlineOff();
@@ -145,7 +146,7 @@ public class PickableObject : MonoBehaviour
       _rigidbody.isKinematic = false;
       _rigidbody.useGravity = true;
     }
-    
+
     _audioSource.PlayOneShot(cubeSound);
 
     _picked = false;
@@ -193,7 +194,7 @@ public class PickableObject : MonoBehaviour
     if (TypeOfDetail == DetailType.Cube && other.TypeOfDetail == DetailType.Rectangle)
     {
       transform.position = other._rectanglePartPosition + new Vector3(0, _collider.size.y, 0);
-      
+
       transform.forward = other.transform.forward;
       IsConnected = true;
 
@@ -208,7 +209,7 @@ public class PickableObject : MonoBehaviour
     {
       transform.position = other.transform.position + new Vector3(0, _collider.size.y, 0);
       transform.rotation = Quaternion.Euler(other._projectionRotation);
-      
+
       IsConnected = true;
 
       ProjectionOff();
@@ -216,15 +217,15 @@ public class PickableObject : MonoBehaviour
 
       return true;
     }
-    
+
     //ставим прямоугольник на прямоугольник
     if (TypeOfDetail == DetailType.Rectangle && other.TypeOfDetail == DetailType.Rectangle)
     {
       transform.position = other._rectanglePartPosition + new Vector3(0, _collider.size.y, 0);
       transform.rotation = Quaternion.Euler(other._projectionRotation);
-      
+
       IsConnected = true;
-      
+
       ProjectionOff();
       other.ConnectFromOther();
 
@@ -266,10 +267,10 @@ public class PickableObject : MonoBehaviour
       if (_projection == null)
       {
         checkSideOfRecktangle = true;
-        
+
         var prefabCollider = projectionCubePrefab.GetComponent<BoxCollider>();
         var pos = _rectanglePartPosition + new Vector3(0, prefabCollider.size.y, 0);
-        
+
         _projection = Instantiate(projectionCubePrefab, pos, Quaternion.identity);
 
         _projection.transform.forward = transform.forward;
@@ -284,13 +285,13 @@ public class PickableObject : MonoBehaviour
       {
         var prefabCollider = projectionRectPrefab.GetComponent<BoxCollider>();
         var pos = transform.position + new Vector3(0, prefabCollider.size.y, 0);
-        
+
         _projection = Instantiate(projectionRectPrefab, pos, Quaternion.identity);
 
         _projection.transform.rotation = Quaternion.Euler(Vector3.zero);
       }
     }
-    
+
     //прямоугольник ставим на прямоугольник
     else if (TypeOfDetail == DetailType.Rectangle && item.TypeOfDetail == DetailType.Rectangle)
     {
@@ -298,12 +299,12 @@ public class PickableObject : MonoBehaviour
       if (_projection == null)
       {
         checkSideOfRecktangle = true;
-        
+
         var prefabCollider = projectionRectPrefab.GetComponent<BoxCollider>();
         var pos = _rectanglePartPosition + new Vector3(0, prefabCollider.size.y, 0);
-        
+
         _projection = Instantiate(projectionRectPrefab, pos, Quaternion.identity);
-        
+
         ///////////////////////
         _projection.transform.rotation = Quaternion.Euler(Vector3.zero);
 
