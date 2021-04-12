@@ -98,11 +98,11 @@ public class GameManager : MonoBehaviour
           //bad - blue
           case 0:
             resultText.text =
-              "Ups, you didn’t guess. That’s why a thick fog descended on the room. But we believe in you! Next time you’re gonna be like!";
+              "Ups, you didn’t guess. That’s why a thick fog descended on the room. But we believe in you! Next time you’re gonna be lucky!";
             break;
           //good - red
           case 1:
-            resultText.text = "Wonderful! You made right choice! And as reward you get ability to jump 2 times higher!";
+            resultText.text = "Wonderful! You've made right choice! And as reward you get ability to jump 2 times higher!";
             break;
         }
 
@@ -113,12 +113,12 @@ public class GameManager : MonoBehaviour
         {
           //good - blue
           case 0:
-            resultText.text = "Wonderful! You made right choice! And as reward you get already prepared half of path!";
+            resultText.text = "Wonderful! You've made right choice! And as reward you get already prepared half of path!";
             break;
           //bad - red
           case 1:
             resultText.text =
-              "Ups, you didn’t guess. That’s why night has fallen and you can see worse… But we believe in you! Next time you’re gonna be like!";
+              "Ups, you didn’t guess. That’s why night has fallen and you can see worse… But we believe in you! Next time you’re gonna be lucky!";
             break;
         }
 
@@ -129,13 +129,13 @@ public class GameManager : MonoBehaviour
         {
           //good - blue
           case 0:
-            resultText.text = "Wonderful! You made right choice! And as reward you get magnetic hands! On this level you can pull blocks that are much further away from you!";
+            resultText.text = "Wonderful! You've made right choice! And as reward you get magnetic hands! On this level you can pull blocks that are much further away from you!";
             PlayerPrefs.SetInt("Distance", 30);
             break;
           //bad - red
           case 1:
             resultText.text =
-              "Ups, you didn’t guess. That’s why you walk twice as slow. But we believe in you! Next time you’re gonna be like!";
+              "Ups, you didn’t guess. That’s why you walk twice slowly. But we believe in you! Next time you’re gonna be lucky!";
             break;
         }
 
