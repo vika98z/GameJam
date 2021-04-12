@@ -245,7 +245,7 @@ MonoBehaviour:
     type: 3}
   projectionRectPrefab: {fileID: 8926018886600978210, guid: b896bff0ffc8a2e4eb0e0a992564d7e9,
     type: 3}
-  pickUpDistance: 3
+  pickUpDistance: 1.5
   parts:
   - {fileID: 1622479316882353045}
   cubeSound: {fileID: 8300000, guid: dfadec3ad3c01d24bafeaf2c2b7f8e6b, type: 3}
