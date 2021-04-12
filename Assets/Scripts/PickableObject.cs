@@ -61,19 +61,31 @@ public class PickableObject : MonoBehaviour
   
   private void Update()
   {
-    if (Input.GetAxis("Mouse ScrollWheel") > 0)
+    if (_canRotate)
     {
-      Angle += 45;
-      if (Angle % 90 == 0)
-        ChangeProjectionRotation(new Vector3(0, Angle, 0));
-    }
+      if (Input.GetAxis("Mouse ScrollWheel") > 0)
+      {
+        Angle += 45;
+        Angle %= 360;
+      
+        if (Angle % 90 == 0)
+          ChangeProjectionRotation(new Vector3(0, Angle, 0));
+      }
 
-    if (Input.GetAxis("Mouse ScrollWheel") < 0)
-    {
-      Angle -= 45;
-      if (Angle % 90 == 0)
-        ChangeProjectionRotation(new Vector3(0, Angle, 0));
+      if (Input.GetAxis("Mouse ScrollWheel") < 0)
+      {
+        Angle -= 45;
+        Angle %= 360;
+
+        if (Angle % 90 == 0)
+          ChangeProjectionRotation(new Vector3(0, Angle, 0));
+      }
     }
+    else
+    {
+      Angle = 0;
+    }
+    
 
     if (checkSideOfRecktangle)
     {
@@ -154,6 +166,8 @@ public class PickableObject : MonoBehaviour
   private void ProjectionOff()
   {
     checkSideOfRecktangle = _canRotate = false;
+    _projectionRotation = Vector3.zero;
+    Angle = 0;
     Destroy(_projection);
   }
 
@@ -170,7 +184,6 @@ public class PickableObject : MonoBehaviour
       IsConnected = true;
 
       ProjectionOff();
-
       other.ConnectFromOther();
 
       return true;
@@ -180,13 +193,11 @@ public class PickableObject : MonoBehaviour
     if (TypeOfDetail == DetailType.Cube && other.TypeOfDetail == DetailType.Rectangle)
     {
       transform.position = other._rectanglePartPosition + new Vector3(0, _collider.size.y, 0);
-      //other.transform.position + new Vector3(Sign * _collider.size.x / 2,
-      //other._collider.size.y / 2 + _collider.size.y / 2, 0);
+      
       transform.forward = other.transform.forward;
       IsConnected = true;
 
       ProjectionOff();
-
       other.ConnectFromOther();
 
       return true;
@@ -197,10 +208,12 @@ public class PickableObject : MonoBehaviour
     {
       transform.position = other.transform.position + new Vector3(0, _collider.size.y, 0);
       transform.rotation = Quaternion.Euler(other._projectionRotation);
+      
+      print("My: " + _projectionRotation + " His: " + other._projectionRotation);
+      
       IsConnected = true;
 
       ProjectionOff();
-
       other.ConnectFromOther();
 
       return true;
@@ -211,10 +224,13 @@ public class PickableObject : MonoBehaviour
     {
       transform.position = other._rectanglePartPosition + new Vector3(0, _collider.size.y, 0);
       transform.rotation = Quaternion.Euler(other._projectionRotation);
+      
       IsConnected = true;
+      
+      print("My: " + _projectionRotation + " His: " + other._projectionRotation);
+
 
       ProjectionOff();
-
       other.ConnectFromOther();
 
       return true;
@@ -234,6 +250,7 @@ public class PickableObject : MonoBehaviour
 
   public void CreateProjection(PickableObject item)
   {
+    _projectionRotation = Vector3.zero;
     _itemForProjection = item;
 
     //квадрат ставим на квадрат
@@ -254,11 +271,10 @@ public class PickableObject : MonoBehaviour
       if (_projection == null)
       {
         checkSideOfRecktangle = true;
-        // //1 вариант
-        //
+        
         var prefabCollider = projectionCubePrefab.GetComponent<BoxCollider>();
         var pos = _rectanglePartPosition + new Vector3(0, prefabCollider.size.y, 0);
-        //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
+        
         _projection = Instantiate(projectionCubePrefab, pos, Quaternion.identity);
 
         _projection.transform.forward = transform.forward;
@@ -273,10 +289,10 @@ public class PickableObject : MonoBehaviour
       {
         var prefabCollider = projectionRectPrefab.GetComponent<BoxCollider>();
         var pos = transform.position + new Vector3(0, prefabCollider.size.y, 0);
-        //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
+        
         _projection = Instantiate(projectionRectPrefab, pos, Quaternion.identity);
 
-        _projection.transform.forward = transform.forward;
+        _projection.transform.rotation = Quaternion.Euler(Vector3.zero);
       }
     }
     
@@ -290,10 +306,13 @@ public class PickableObject : MonoBehaviour
         
         var prefabCollider = projectionRectPrefab.GetComponent<BoxCollider>();
         var pos = _rectanglePartPosition + new Vector3(0, prefabCollider.size.y, 0);
-        //transform.position + new Vector3(prefabCollider.size.x / 2, _collider.size.y / 2 + prefabCollider.size.y / 2, 0);
+        
         _projection = Instantiate(projectionRectPrefab, pos, Quaternion.identity);
+        
+        ///////////////////////
+        _projection.transform.rotation = Quaternion.Euler(Vector3.zero);
 
-        _projection.transform.forward = transform.forward;
+        //_projection.transform.forward = transform.forward;
       }
     }
   }
