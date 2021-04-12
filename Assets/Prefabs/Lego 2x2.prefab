@@ -248,6 +248,7 @@ MonoBehaviour:
   pickUpDistance: 3
   parts:
   - {fileID: 1622479316882353045}
+  cubeSound: {fileID: 8300000, guid: dfadec3ad3c01d24bafeaf2c2b7f8e6b, type: 3}
   IsConnectable: 1
   IsHighlightable: 1
   TypeOfDetail: 0

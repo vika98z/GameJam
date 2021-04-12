@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
   [SerializeField] private float startAnimTime = 0.3f;
   [SerializeField] private float stopAnimTime = 0.15f;
 
+  [SerializeField] private AudioClip jumpClip;
+  
   public Action<int> OnButtonPressed;
 
   private CharacterController _controller;
@@ -23,9 +25,14 @@ public class Player : MonoBehaviour
   private bool _groundedPlayer;
   private float _turnSmoothVelocity;
   private readonly float allowPlayerRotation = 0.1f;
-
-  private void Awake() =>
+  private AudioSource _audioSource;
+  private Vector3 moveDir;
+  
+  private void Awake()
+  {
     _controller = GetComponent<CharacterController>();
+    _audioSource = GetComponent<AudioSource>();
+  }
 
   private void Update() =>
     Move();
@@ -69,18 +76,23 @@ public class Player : MonoBehaviour
         Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, turnSmoothTime);
       transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-      Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+      moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-      _controller.Move(moveDir.normalized * Time.deltaTime * speed);
+      //_controller.Move(moveDir.normalized * Time.deltaTime * speed);
+    }
+    else
+    {
+      moveDir=Vector3.zero;
     }
 
     if (Input.GetButtonDown("Jump") && _groundedPlayer)
     {
       _playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * GravityValue);
+      _audioSource.PlayOneShot(jumpClip);
     }
 
     _playerVelocity.y += GravityValue * Time.deltaTime;
-    _controller.Move(_playerVelocity * Time.deltaTime);
+    _controller.Move(moveDir.normalized * Time.deltaTime * speed + _playerVelocity * Time.deltaTime);
   }
 
   private void SetAnimation(float horizontal, float vertical)

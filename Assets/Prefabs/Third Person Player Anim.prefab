@@ -3935,6 +3935,7 @@ MonoBehaviour:
   animator: {fileID: 1769015785966385090}
   startAnimTime: 0.3
   stopAnimTime: 0.15
+  jumpClip: {fileID: 8300000, guid: fce72944b48d5644d8572b3c522e4018, type: 3}
 --- !u!114 &5869638515893710700
 MonoBehaviour:
   m_ObjectHideFlags: 0

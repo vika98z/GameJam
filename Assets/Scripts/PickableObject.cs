@@ -12,6 +12,7 @@ public class PickableObject : MonoBehaviour
   [SerializeField] private GameObject projectionRectPrefab;
   [SerializeField] private float pickUpDistance;
   [SerializeField] private GameObject[] parts;
+  [SerializeField] private AudioClip cubeSound;
 
   public Camera MainCamera { get; set; }
   public Player Player { get; set; }
@@ -43,6 +44,8 @@ public class PickableObject : MonoBehaviour
   //для установки прямоугольника на что-либо
   private bool _canRotate;
   public Vector3 _projectionRotation;
+  
+  private AudioSource _audioSource;
 
   private void Awake()
   {
@@ -55,6 +58,7 @@ public class PickableObject : MonoBehaviour
     _layerMask = LayerMask.GetMask("LegoPart");
   }
 
+  
   private void Update()
   {
     if (Input.GetAxis("Mouse ScrollWheel") > 0)
@@ -96,8 +100,11 @@ public class PickableObject : MonoBehaviour
     }
   }
 
-  private void Start() =>
+  private void Start()
+  {
     OutlineOff();
+    _audioSource = Player.GetComponent<AudioSource>();
+  }
 
   public void PickUp(Transform holdObject)
   {
@@ -111,6 +118,8 @@ public class PickableObject : MonoBehaviour
     _rigidbody.useGravity = false;
 
     _picked = true;
+    
+    _audioSource.PlayOneShot(cubeSound);
 
     OutlineOff();
   }
@@ -124,6 +133,8 @@ public class PickableObject : MonoBehaviour
       _rigidbody.isKinematic = false;
       _rigidbody.useGravity = true;
     }
+    
+    _audioSource.PlayOneShot(cubeSound);
 
     _picked = false;
   }
@@ -148,6 +159,8 @@ public class PickableObject : MonoBehaviour
 
   public bool Connect(PickableObject other)
   {
+    _audioSource.PlayOneShot(cubeSound);
+
     //ставим квадрат на квадрат 
     if (TypeOfDetail == DetailType.Cube && other.TypeOfDetail == DetailType.Cube)
     {
