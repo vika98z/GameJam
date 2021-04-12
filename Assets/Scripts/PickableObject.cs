@@ -209,8 +209,6 @@ public class PickableObject : MonoBehaviour
       transform.position = other.transform.position + new Vector3(0, _collider.size.y, 0);
       transform.rotation = Quaternion.Euler(other._projectionRotation);
       
-      print("My: " + _projectionRotation + " His: " + other._projectionRotation);
-      
       IsConnected = true;
 
       ProjectionOff();
@@ -227,9 +225,6 @@ public class PickableObject : MonoBehaviour
       
       IsConnected = true;
       
-      print("My: " + _projectionRotation + " His: " + other._projectionRotation);
-
-
       ProjectionOff();
       other.ConnectFromOther();
 

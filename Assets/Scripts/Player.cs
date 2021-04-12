@@ -109,4 +109,7 @@ public class Player : MonoBehaviour
     else
       animator.SetFloat("Blend", 0, startAnimTime, Time.deltaTime);
   }
+
+  public void SetBigJump() => 
+    jumpHeight = 3.5f;
 }
