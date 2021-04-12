@@ -10,6 +10,7 @@ public class SceneLoader : MonoBehaviour
     
     public void Load()
     {
+        PlayerPrefs.DeleteAll();
         loadingScreen.SetActive(true);
         StartCoroutine(LoadAsync());
     }
@@ -20,5 +21,10 @@ public class SceneLoader : MonoBehaviour
 
         while (!asyncOperation.isDone)
             yield return null;
+    }
+    
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

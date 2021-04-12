@@ -26,6 +26,9 @@ public class PickUp : MonoBehaviour
 
   private void Update()
   {
+    if (gameManager.GameIsPaused)
+      return;
+    
     var directionRay = camera.ScreenPointToRay(Input.mousePosition);
     
     var distance = pickUpDistance + 

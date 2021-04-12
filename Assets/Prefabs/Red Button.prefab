@@ -110,7 +110,7 @@ MonoBehaviour:
   buttonSound: {fileID: 0}
   button: {fileID: 510576643958025887}
   player: {fileID: 0}
-  NumberOfButton: 0
+  NumberOfButton: 1
 --- !u!1 &3176594034025583114
 GameObject:
   m_ObjectHideFlags: 0
